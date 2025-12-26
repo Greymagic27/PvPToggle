@@ -34,10 +34,10 @@ public class PvP implements Listener {
         }
 
         //check if attack was a player
-        if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
-            Player damager = (Player) event.getDamager(); //player who hit
+        if (event.getDamager() instanceof Player damager && event.getEntity() instanceof Player attacked) {
+            //player who hit
             Boolean damagerState = PvPToggle.instance.players.get(damager.getUniqueId());
-            Player attacked = (Player) event.getEntity(); //player who was hit
+            //player who was hit
             Boolean attackedState = PvPToggle.instance.players.get(attacked.getUniqueId());
             if (damagerState) {
                 event.setCancelled(true);
@@ -50,13 +50,10 @@ public class PvP implements Listener {
                 Util.setCooldownTime(attacked);
             }
             //checks if damage was done by a projectile
-        } else if (event.getDamager() instanceof Projectile) {
-            Projectile arrow = (Projectile) event.getDamager();
-            if (arrow.getShooter() instanceof Player) {
-                if (event.getEntity() instanceof Player) {
-                    Player damager = (Player) arrow.getShooter();
+        } else if (event.getDamager() instanceof Projectile arrow) {
+            if (arrow.getShooter() instanceof Player damager) {
+                if (event.getEntity() instanceof Player attacked) {
                     Boolean damagerState = PvPToggle.instance.players.get(damager.getUniqueId());
-                    Player attacked = (Player) event.getEntity();
                     Boolean attackedState = PvPToggle.instance.players.get(attacked.getUniqueId());
                     if (damager == attacked) {
                         return;
@@ -74,12 +71,9 @@ public class PvP implements Listener {
                 }
             }
             //checks if damage was done by a potion
-        } else if (event.getDamager() instanceof ThrownPotion) {
-            ThrownPotion potion = (ThrownPotion) event.getDamager();
-            if (potion.getShooter() instanceof Player && event.getEntity() instanceof Player) {
-                Player damager = (Player) potion.getShooter();
+        } else if (event.getDamager() instanceof ThrownPotion potion) {
+            if (potion.getShooter() instanceof Player damager && event.getEntity() instanceof Player attacked) {
                 Boolean damagerState = PvPToggle.instance.players.get(damager.getUniqueId());
-                Player attacked = (Player) event.getEntity();
                 Boolean attackedState = PvPToggle.instance.players.get(attacked.getUniqueId());
                 if (damager == attacked) {
                     return;
@@ -95,14 +89,12 @@ public class PvP implements Listener {
                     Util.setCooldownTime(attacked);
                 }
             }
-        } else if (event.getDamager() instanceof LightningStrike && event.getDamager().getMetadata("TRIDENT").size() >= 1 && event.getEntity() instanceof Player) {
-            Player attacked = (Player) event.getEntity();
+        } else if (event.getDamager() instanceof LightningStrike && event.getDamager().getMetadata("TRIDENT").size() >= 1 && event.getEntity() instanceof Player attacked) {
             Boolean attackedState = PvPToggle.instance.players.get(attacked.getUniqueId());
             if (attackedState != null && attackedState) {
                 event.setCancelled(true);
             }
-        } else if (event.getDamager() instanceof Firework && event.getEntity() instanceof Player) {
-            Player attacked = (Player) event.getEntity();
+        } else if (event.getDamager() instanceof Firework && event.getEntity() instanceof Player attacked) {
             Boolean attackedState = PvPToggle.instance.players.get(attacked.getUniqueId());
             if (attackedState != null && attackedState) {
                 event.setCancelled(true);
@@ -117,12 +109,9 @@ public class PvP implements Listener {
             return;
         }
 
-        if (event.getCombuster() instanceof Arrow) {
-            Arrow arrow = (Arrow) event.getCombuster();
-            if (arrow.getShooter() instanceof Player && event.getEntity() instanceof Player) {
-                Player damager = (Player) arrow.getShooter();
+        if (event.getCombuster() instanceof Arrow arrow) {
+            if (arrow.getShooter() instanceof Player damager && event.getEntity() instanceof Player attacked) {
                 Boolean damagerState = PvPToggle.instance.players.get(damager.getUniqueId());
-                Player attacked = (Player) event.getEntity();
                 Boolean attackedState = PvPToggle.instance.players.get(attacked.getUniqueId());
                 if (damagerState) {
                     event.setCancelled(true);
@@ -143,10 +132,9 @@ public class PvP implements Listener {
             return;
         }
 
-        if (event.getPotion().getShooter() instanceof Player) {
+        if (event.getPotion().getShooter() instanceof Player damager) {
             for (LivingEntity entity : event.getAffectedEntities()) {
                 if (entity instanceof Player attacked) {
-                    Player damager = (Player) event.getPotion().getShooter();
                     Boolean damagerState = PvPToggle.instance.players.get(damager.getUniqueId());
                     Boolean attackedState = PvPToggle.instance.players.get(attacked.getUniqueId());
                     if (damager != attacked) {
@@ -183,12 +171,11 @@ public class PvP implements Listener {
             return;
         }
 
-        if (event.getEntity().getSource() instanceof Player) {
+        if (event.getEntity().getSource() instanceof Player damager) {
             Iterator<LivingEntity> it = event.getAffectedEntities().iterator();
             while (it.hasNext()) {
                 LivingEntity entity = it.next();
                 if (entity instanceof Player attacked && entity != null) {
-                    Player damager = (Player) event.getEntity().getSource();
                     Boolean damagerState = PvPToggle.instance.players.get(damager.getUniqueId());
                     Boolean attackedState = PvPToggle.instance.players.get(attacked.getUniqueId());
                     if (attackedState != null && attackedState) {
@@ -211,10 +198,9 @@ public class PvP implements Listener {
             return;
         }
 
-        if (event.getCaught() instanceof Player) {
+        if (event.getCaught() instanceof Player attacked) {
             final Player damager = event.getPlayer();
             Boolean damagerState = PvPToggle.instance.players.get(damager.getUniqueId());
-            final Player attacked = (Player) event.getCaught();
             Boolean attackedState = PvPToggle.instance.players.get(attacked.getUniqueId());
             if (damager.getInventory().getItemInMainHand().getType() == Material.FISHING_ROD || damager.getInventory().getItemInOffHand().getType() == Material.FISHING_ROD) {
                 if (damagerState) {
