@@ -1,16 +1,16 @@
 SETTINGS:
-##Do you want the plugin to remember a player's last PVP state when the login
+  ##Do you want the plugin to remember a player's last PVP state when the login
   PERSISTENT_PVP_STATE: false
-##How much time a player must wait to use /pvp off/toggle (if pvp is on) in seconds after running the command or being in pvp
+  ##How much time a player must wait to use /pvp off/toggle (if pvp is on) in seconds after running the command or being in pvp
   COOLDOWN: 0
-##True makes pvp off by default. False makes pvp on by default.
+  ##True makes pvp off by default. False makes pvp on by default.
   DEFAULT_PVP_OFF: true
-##Show PVP on particle effects
+  ##Show PVP on particle effects
   PARTICLES: true
-##SHOW PVP on red nametag
+  ##SHOW PVP on red nametag
   NAMETAG: false
-## Worlds to disable PvP toggling in (i.e. will always use the world's settings)
-  BLOCKED_WORLDS: []
+  ## Worlds to disable PvP toggling in (i.e. will always use the world's settings)
+  BLOCKED_WORLDS: [ ]
 ##<pvpstate> goes in place of a player's current pvp state
 ##<parameter> goes in place of a player's name or other parameter
 MESSAGES:
@@ -23,7 +23,7 @@ MESSAGES:
   COMMAND_NO_PERMISSION: '&cYou do not have permission to set others pvp  state.'
   PVP_STATE_ENABLED: '&aYour pvp has been enabled!'
   PVP_STATE_DISABLED: '&aYour pvp has been disabled!'
-  PVP_STATE_CHANGED_OTHERS: '&a<parameter> had their pvp state changed to <pvpstate>' 
+  PVP_STATE_CHANGED_OTHERS: '&a<parameter> had their pvp state changed to <pvpstate>'
   PVP_STATUS: '&aYour pvp is set to <pvpstate>'
   PVP_STATUS_OTHERS: '&a<parameter> has their pvp <pvpstate>'
   PVP_DISABLED: '&cYou have pvp disabled!'

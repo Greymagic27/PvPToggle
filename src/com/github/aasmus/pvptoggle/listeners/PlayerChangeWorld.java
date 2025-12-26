@@ -36,10 +36,9 @@ public class PlayerChangeWorld implements Listener {
             if (PvPToggle.instance.getConfig().getBoolean("SETTINGS.PARTICLES")) {
                 Util.particleEffect(player);
             }
-			if(PvPToggle.instance.getConfig().getBoolean("SETTINGS.NAMETAG")) {
-				Util.ChangeNametag(player, "&c");
-			}
-            return;
+            if (PvPToggle.instance.getConfig().getBoolean("SETTINGS.NAMETAG")) {
+                Util.ChangeNametag(player, "&c");
+            }
         }
     }
 }
