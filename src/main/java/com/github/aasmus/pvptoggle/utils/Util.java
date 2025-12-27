@@ -5,6 +5,7 @@ import com.nametagedit.plugin.NametagEdit;
 import java.util.Date;
 import java.util.UUID;
 import org.bukkit.Color;
+import org.bukkit.GameRules;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
@@ -14,7 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class Util {
 
-    private static final float radius = .5f;
+    private static final float radius = 0.5f;
 
     public static boolean getPlayerState(UUID uuid) {
         Boolean result = PvPToggle.instance.players.get(uuid);
@@ -34,7 +35,8 @@ public class Util {
 
         World world = player.getWorld();
         // You can't set the state to false (PVP enabled) if the world doesn't allow it
-        if (!world.getPVP() && !state) {
+        boolean pvp = Boolean.TRUE.equals(player.getWorld().getGameRuleValue(GameRules.PVP));
+        if (!pvp && !state) {
             if (caller == player) {
                 Chat.send(caller, "PVP_WORLD_CANNOT_CHANGE_SELF");
             } else {
@@ -43,7 +45,7 @@ public class Util {
             return false;
         }
         // You can't set the state to true (PVP disabled) if the world requires it
-        if (world.getPVP() && PvPToggle.blockedWorlds.contains(world.getName()) && state) {
+        if (pvp && PvPToggle.blockedWorlds.contains(world.getName()) && state) {
             if (caller == player) {
                 Chat.send(caller, "PVP_WORLD_CANNOT_CHANGE_SELF");
             } else {
@@ -83,7 +85,7 @@ public class Util {
 
     public static void ChangeNametag(Player p, String color) {
         if (PvPToggle.instance.getServer().getPluginManager().isPluginEnabled("NametagEdit")) {
-            if (color == "reset") {
+            if (color.equals("reset")) {
                 NametagEdit.getApi().clearNametag(p);
             } else {
                 NametagEdit.getApi().setPrefix(p, color);
@@ -108,7 +110,7 @@ public class Util {
                         double x = (radius * Math.sin(angle));
                         double z = (radius * Math.cos(angle));
                         angle += 0.251;
-                        p.getWorld().spawnParticle(Particle.REDSTONE, location.getX() + x, location.getY(), location.getZ() + z, 0, 0, 1, 0, dustOptions);
+                        p.getWorld().spawnParticle(Particle.DUST, location.getX() + x, location.getY(), location.getZ() + z, 0, 0, 1, 0, dustOptions);
                     }
                 }
 

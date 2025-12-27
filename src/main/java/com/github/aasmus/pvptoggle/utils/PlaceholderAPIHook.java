@@ -3,7 +3,8 @@ package com.github.aasmus.pvptoggle.utils;
 import com.github.aasmus.pvptoggle.PvPToggle;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
-
+import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public class PlaceholderAPIHook extends PlaceholderExpansion {
 
@@ -14,25 +15,21 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
     }
 
     @Override
-    public String onPlaceholderRequest(Player player, String identifier) {
-        if (player == null) {
-            return "";
-        }
+    public String onPlaceholderRequest(Player player, @NonNull String identifier) {
+        if (player == null) return "";
 
         //Placeholder: %pvptoggle_pvp_state%
-        if (identifier.equals("pvp_state")) {
-            return PvPToggle.instance.players.get(player.getUniqueId()) ? "&aOff" : "&cOn";
-        }
-        //Placeholder: %pvptoggle_pvp_symbol%
-        if (identifier.equals("pvp_symbol")) {
-            return PvpToggle.instance.players.get(player.getUniqueId()) ? "" : "&6^";
-        }
-        //Placeholder: %pvptoggle_pvp_state_clean%
-        if (identifier.equals("pvp_state_clean")) {
-            return PvpToggle.instance.players.get(player.getUniqueId()) ? "false" : "true";
-        }
+        return switch (identifier) {
+            case "pvp_state" -> PvPToggle.instance.players.get(player.getUniqueId()) ? "&aOff" : "&cOn";
 
-        return null;
+            //Placeholder: %pvptoggle_pvp_symbol%
+            case "pvp_symbol" -> PvPToggle.instance.players.get(player.getUniqueId()) ? "" : "&6^";
+
+            //Placeholder: %pvptoggle_pvp_state_clean%
+            case "pvp_state_clean" -> PvPToggle.instance.players.get(player.getUniqueId()) ? "false" : "true";
+            default -> null;
+        };
+
     }
 
     @Override
@@ -46,19 +43,19 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
     }
 
     @Override
-    public String getIdentifier() {
+    public @NonNull String getIdentifier() {
         return "PvPToggle";
     }
 
     @Override
-    public String getAuthor() {
-        return plugin.getDescription().getAuthors().toString();
+    public @NotNull String getAuthor() {
+        return plugin.getPluginMeta().getAuthors().toString();
     }
 
 
     @Override
-    public String getVersion() {
-        return plugin.getDescription().getVersion();
+    public @NonNull String getVersion() {
+        return plugin.getPluginMeta().getVersion();
     }
 
 }

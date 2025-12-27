@@ -2,17 +2,19 @@ package com.github.aasmus.pvptoggle;
 
 import com.github.aasmus.pvptoggle.utils.Chat;
 import com.github.aasmus.pvptoggle.utils.Util;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NonNull;
 
 public class PvPCommand implements CommandExecutor {
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NonNull CommandSender sender, @NonNull Command cmd, @NonNull String label, String @NonNull [] args) {
         if (sender instanceof ConsoleCommandSender console) { //check if command sender is console
             if (args.length == 0) {
                 Chat.send(console, "HELP_HEADER");
@@ -64,7 +66,7 @@ public class PvPCommand implements CommandExecutor {
                             }
                         }
                         current = PvPToggle.instance.players.get(other.getUniqueId());
-                        Chat.send(console, "PVP_STATE_CHANGED_OTHERS", other.getDisplayName(), current);
+                        Chat.send(console, "PVP_STATE_CHANGED_OTHERS", PlainTextComponentSerializer.plainText().serialize(other.displayName()), current);
                     }
                 } catch (Exception e) {
                     //nothing needs to be done
@@ -76,10 +78,8 @@ public class PvPCommand implements CommandExecutor {
                     Chat.send(p, "PVP_STATUS", null, PvPToggle.instance.players.get(p.getUniqueId()));
                     Chat.send(p, "HELP_HEADER");
                     Chat.send(p, "HELP_GENERAL_USEAGE");
-                    if (p.hasPermission("pvptoggle.others"))
-                        Chat.send(p, "HELP_VIEW_OTHERS");
-                    if (p.hasPermission("pvptoggle.others.set"))
-                        Chat.send(p, "HELP_SET_OTHERS");
+                    if (p.hasPermission("pvptoggle.others")) Chat.send(p, "HELP_VIEW_OTHERS");
+                    if (p.hasPermission("pvptoggle.others.set")) Chat.send(p, "HELP_SET_OTHERS");
                 } else if (args.length == 1) {
                     if (args[0].equals("reload") && p.hasPermission("pvptoggle.reload")) {
                         reloadConfig();
@@ -135,7 +135,7 @@ public class PvPCommand implements CommandExecutor {
                                         Chat.send(p, "NO_PLAYER", args[0]);
                                     } else {
                                         current = PvPToggle.instance.players.get(other.getUniqueId());
-                                        Chat.send(p, "PVP_STATUS_OTHERS", other.getDisplayName(), current);
+                                        Chat.send(p, "PVP_STATUS_OTHERS", PlainTextComponentSerializer.plainText().serialize(other.displayName()), current);
                                     }
                                 } else {
                                     if (!args[0].contains("\\")) {
@@ -190,7 +190,7 @@ public class PvPCommand implements CommandExecutor {
                                 }
                             }
                             current = PvPToggle.instance.players.get(other.getUniqueId());
-                            Chat.send(p, "PVP_STATE_CHANGED_OTHERS", other.getDisplayName(), current);
+                            Chat.send(p, "PVP_STATE_CHANGED_OTHERS", PlainTextComponentSerializer.plainText().serialize(other.displayName()), current);
                         }
                     } else {
                         Chat.send(p, "COMMAND_NO_PERMISSION");

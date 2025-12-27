@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -30,33 +31,21 @@ public class PvPToggle extends JavaPlugin implements Listener {
     public void onEnable() {
         instance = this;
         this.config = getConfig();
-        //save config
-        if (config != null) {
-            this.saveDefaultConfig();
-        }
-
+        this.saveDefaultConfig();
         File PVPData = new File(getDataFolder(), "Data");
         dataUtils = new PersistentData(PVPData);
-
-        //register events
         getServer().getPluginManager().registerEvents(this, this);
         Bukkit.getPluginManager().registerEvents(new PlayerJoin(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerLeave(), this);
         Bukkit.getPluginManager().registerEvents(new PvP(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerChangeWorld(), this);
-        //register command
-        this.getCommand("_pvp").setExecutor(new PvPCommand());
-
+        Objects.requireNonNull(this.getCommand("_pvp")).setExecutor(new PvPCommand());
         blockedWorlds = config.getStringList("SETTINGS.BLOCKED_WORLDS");
-
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            new PlaceholderAPIHook(this).register();
-        }
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) new PlaceholderAPIHook(this).canRegister();
     }
 
     @Override
     public void onDisable() {
-
+        // comment
     }
-
 }

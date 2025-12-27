@@ -8,10 +8,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.jspecify.annotations.NonNull;
 
 public class PlayerChangeWorld implements Listener {
     @EventHandler
-    public void onChangeWorld(PlayerChangedWorldEvent event) {
+    public void onChangeWorld(@NonNull PlayerChangedWorldEvent event) {
         Player player = event.getPlayer();
         World world = player.getWorld();
         boolean playerPvpEnabled = !Util.getPlayerState(player.getUniqueId());
