@@ -15,7 +15,7 @@ SETTINGS:
 ##<parameter> goes in place of a player's name or other parameter
 MESSAGES:
   HELP_HEADER: '&a&lCommands:'
-  HELP_GENERAL_USEAGE: '&aUse /pvp {toggle|on|off|status} to change/view pvp state.'
+  HELP_GENERAL_USEAGE: '&aUse /_pvp {toggle|on|off|status} to change/view pvp state.'
   HELP_VIEW_OTHERS: '&aUse /_pvp <player> to see another players pvp state.'
   HELP_SET_OTHERS: '&aUse /_pvp {toggle|on|off} <player> to set another players pvp state.'
   NO_PLAYER: '&cCould not find a player by the name <parameter>'
