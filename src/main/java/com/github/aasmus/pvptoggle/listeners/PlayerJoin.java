@@ -2,6 +2,7 @@ package com.github.aasmus.pvptoggle.listeners;
 
 import com.github.aasmus.pvptoggle.PvPToggle;
 import com.github.aasmus.pvptoggle.utils.Util;
+import java.util.Objects;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,7 +24,7 @@ public class PlayerJoin implements Listener {
                     }
                 }
             } else {
-                PvPToggle.instance.dataUtils.addPlayer(p.getPlayer());
+                PvPToggle.instance.dataUtils.addPlayer(Objects.requireNonNull(p.getPlayer()));
                 PvPToggle.instance.players.put(p.getUniqueId(), PvPToggle.instance.dataUtils.GetPlayerPvPState(p.getPlayer())); //add player to players hash map and set their pvp state
                 if (PvPToggle.instance.players.get(p.getUniqueId()) == false) {
                     if (PvPToggle.instance.getConfig().getBoolean("SETTINGS.PARTICLES")) {
@@ -51,7 +52,7 @@ public class PlayerJoin implements Listener {
                 }
             }
         } else {
-            PvPToggle.instance.dataUtils.addPlayer(p.getPlayer());
+            PvPToggle.instance.dataUtils.addPlayer(Objects.requireNonNull(p.getPlayer()));
             PvPToggle.instance.players.put(p.getUniqueId(), PvPToggle.instance.dataUtils.GetPlayerPvPState(p.getPlayer())); //add player to players hash map and set their pvp state
             if (PvPToggle.instance.players.get(p.getUniqueId()) == false) {
                 if (PvPToggle.instance.getConfig().getBoolean("SETTINGS.PARTICLES")) {

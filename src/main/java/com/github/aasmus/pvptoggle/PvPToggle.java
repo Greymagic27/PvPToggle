@@ -22,8 +22,8 @@ public class PvPToggle extends JavaPlugin implements Listener {
     public static List<String> blockedWorlds;
     public static PvPToggle instance;
     public FileConfiguration config;
-    public HashMap<UUID, Boolean> players = new HashMap<>(); //False is pvp on True is pvp off
-    public HashMap<UUID, Date> cooldowns = new HashMap<>();
+    public final HashMap<UUID, Boolean> players = new HashMap<>(); //False is pvp on True is pvp off
+    public final HashMap<UUID, Date> cooldowns = new HashMap<>();
 
     public PersistentData dataUtils;
 

@@ -4,7 +4,9 @@ import com.github.aasmus.pvptoggle.PvPToggle;
 import com.github.aasmus.pvptoggle.utils.Chat;
 import com.github.aasmus.pvptoggle.utils.Util;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Firework;
@@ -21,19 +23,20 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.weather.LightningStrikeEvent;
-import org.bukkit.metadata.FixedMetadataValue;
-
+import org.jspecify.annotations.NonNull;
 
 public class PvP implements Listener {
 
+    private static final Map<LightningStrike, Boolean> tridentStrike = new HashMap<>();
+
     @EventHandler(ignoreCancelled = true)
     //fired when an entity is hit
-    public void onHit(EntityDamageByEntityEvent event) {
+    public void onHit(@NonNull EntityDamageByEntityEvent event) {
         if (PvPToggle.blockedWorlds.contains(event.getEntity().getWorld().getName())) {
             return;
         }
 
-        //check if attack was a player
+        //noinspection IfCanBeSwitch
         if (event.getDamager() instanceof Player damager && event.getEntity() instanceof Player attacked) {
             //player who hit
             Boolean damagerState = PvPToggle.instance.players.get(damager.getUniqueId());
@@ -44,7 +47,7 @@ public class PvP implements Listener {
                 Chat.send(damager, "PVP_DISABLED");
             } else if (attackedState != null && attackedState) {
                 event.setCancelled(true);
-                Chat.send(damager, "PVP_DISABLED_OTHERS", attacked.getDisplayName());
+                Chat.send(damager, "PVP_DISABLED_OTHERS", attacked.displayName().toString());
             } else {
                 Util.setCooldownTime(damager);
                 Util.setCooldownTime(attacked);
@@ -63,7 +66,7 @@ public class PvP implements Listener {
                         Chat.send(damager, "PVP_DISABLED");
                     } else if (attackedState != null && attackedState) {
                         event.setCancelled(true);
-                        Chat.send(damager, "PVP_DISABLED_OTHERS", attacked.getDisplayName());
+                        Chat.send(damager, "PVP_DISABLED_OTHERS", attacked.displayName().toString());
                     } else {
                         Util.setCooldownTime(damager);
                         Util.setCooldownTime(attacked);
@@ -83,16 +86,16 @@ public class PvP implements Listener {
                     Chat.send(damager, "PVP_DISABLED");
                 } else if (attackedState != null && attackedState) {
                     event.setCancelled(true);
-                    Chat.send(damager, "PVP_DISABLED_OTHERS", attacked.getDisplayName());
+                    Chat.send(damager, "PVP_DISABLED_OTHERS", attacked.displayName().toString());
                 } else {
                     Util.setCooldownTime(damager);
                     Util.setCooldownTime(attacked);
                 }
             }
-        } else if (event.getDamager() instanceof LightningStrike && event.getDamager().getMetadata("TRIDENT").size() >= 1 && event.getEntity() instanceof Player attacked) {
-            Boolean attackedState = PvPToggle.instance.players.get(attacked.getUniqueId());
-            if (attackedState != null && attackedState) {
-                event.setCancelled(true);
+        } else if (event.getDamager() instanceof LightningStrike lightning && tridentStrike.containsKey(lightning)) {
+            if (event.getEntity() instanceof Player attacked) {
+                Boolean attackedState = PvPToggle.instance.players.get(attacked.getUniqueId());
+                if (attackedState != null && attackedState) event.setCancelled(true);
             }
         } else if (event.getDamager() instanceof Firework && event.getEntity() instanceof Player attacked) {
             Boolean attackedState = PvPToggle.instance.players.get(attacked.getUniqueId());
@@ -104,7 +107,7 @@ public class PvP implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     //fired when a player is shot with a flaming arrow
-    public void onFlameArrow(EntityCombustByEntityEvent event) {
+    public void onFlameArrow(@NonNull EntityCombustByEntityEvent event) {
         if (PvPToggle.blockedWorlds.contains(event.getEntity().getWorld().getName())) {
             return;
         }
@@ -127,7 +130,7 @@ public class PvP implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     //fired when a splash potion is thrown
-    public void onPotionSplash(PotionSplashEvent event) {
+    public void onPotionSplash(@NonNull PotionSplashEvent event) {
         if (PvPToggle.blockedWorlds.contains(event.getEntity().getWorld().getName())) {
             return;
         }
@@ -153,7 +156,7 @@ public class PvP implements Listener {
                                     event.setIntensity(ent, 0);
                                 }
                             }
-                            Chat.send(damager, "PVP_DISABLED_OTHERS", attacked.getDisplayName());
+                            Chat.send(damager, "PVP_DISABLED_OTHERS", attacked.displayName().toString());
                         } else {
                             Util.setCooldownTime(damager);
                             Util.setCooldownTime(attacked);
@@ -166,7 +169,7 @@ public class PvP implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     //fired when lingering potion cloud is active
-    public void onCloudEffects(AreaEffectCloudApplyEvent event) {
+    public void onCloudEffects(@NonNull AreaEffectCloudApplyEvent event) {
         if (PvPToggle.blockedWorlds.contains(event.getEntity().getWorld().getName())) {
             return;
         }
@@ -175,7 +178,7 @@ public class PvP implements Listener {
             Iterator<LivingEntity> it = event.getAffectedEntities().iterator();
             while (it.hasNext()) {
                 LivingEntity entity = it.next();
-                if (entity instanceof Player attacked && entity != null) {
+                if (entity instanceof Player attacked) {
                     Boolean damagerState = PvPToggle.instance.players.get(damager.getUniqueId());
                     Boolean attackedState = PvPToggle.instance.players.get(attacked.getUniqueId());
                     if (attackedState != null && attackedState) {
@@ -193,7 +196,7 @@ public class PvP implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     //fired when a player uses a fishing rod
-    public void onPlayerFishing(PlayerFishEvent event) {
+    public void onPlayerFishing(@NonNull PlayerFishEvent event) {
         if (PvPToggle.blockedWorlds.contains(event.getPlayer().getWorld().getName())) {
             return;
         }
@@ -208,7 +211,7 @@ public class PvP implements Listener {
                     Chat.send(damager, "PVP_DISABLED");
                 } else if (attackedState != null && attackedState) {
                     event.setCancelled(true);
-                    Chat.send(damager, "PVP_DISABLED_OTHERS", attacked.getDisplayName());
+                    Chat.send(damager, "PVP_DISABLED_OTHERS", attacked.displayName().toString());
                 } else {
                     Util.setCooldownTime(damager);
                     Util.setCooldownTime(attacked);
@@ -219,10 +222,7 @@ public class PvP implements Listener {
 
     //Tag lightning strike as from a trident
     @EventHandler(ignoreCancelled = true)
-    public void onLightningStrike(LightningStrikeEvent event) {
-        if (event.getCause() == LightningStrikeEvent.Cause.TRIDENT) {
-            event.getLightning().setMetadata("TRIDENT", new FixedMetadataValue(PvPToggle.instance, event.getLightning().getLocation()));
-        }
+    public void onLightningStrike(@NonNull LightningStrikeEvent event) {
+        if (event.getCause() == LightningStrikeEvent.Cause.TRIDENT) tridentStrike.put(event.getLightning(), true);
     }
-
 }
