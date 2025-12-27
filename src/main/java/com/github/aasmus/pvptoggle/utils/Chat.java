@@ -27,8 +27,9 @@ public class Chat {
     public static void send(CommandSender sender, String message, String parameter, Boolean pvpState) {
         String msg = formatMessage(message);
         if (msg.isEmpty()) return;
-        String output = msg.replace("<parameter>", parameter);
-        output = output.replace("<pvpstate>", pvpState ? "off" : "on");
+        if (parameter == null) parameter = "";
+        boolean state = pvpState != null && pvpState;
+        String output = msg.replace("<parameter>", parameter).replace("<pvpstate>", state ? "off" : "on");
         sender.sendMessage(Component.text(output));
     }
 
